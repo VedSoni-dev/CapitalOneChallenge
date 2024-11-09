@@ -1,19 +1,41 @@
-<<<<<<< HEAD
-# Dynamic Grocery Budgeting Tool
+# Financial Decision Making Game
 
-This tool helps users manage their weekly grocery budget while ensuring they meet their daily macronutrient needs based on age and family size. It also tracks savings from unspent grocery money and helps users save for desired purchases.
+Welcome to the Financial Decision Making Game! This interactive game challenges players to make smart financial decisions through various scenarios. Your goal is to manage your money wisely and achieve a positive outcome by the end of the game.
 
-## Features:
-- Budget allocation based on weekly input.
-- Macro-nutrient optimization for each family member based on age.
-- Real-time grocery prices from Walmart API.
-- Savings tracker for future purchases.
+## Table of Contents
 
-## How to Use:
-1. Clone the repository.
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run the app: `python app.py`
-=======
-# CapitalOneChallenge
-Datathon 2024-25 Project | Allen Thomas, Hitansh Mendirata, Vedant Soni
->>>>>>> a63d4a78bb94a0867ebfeaf087d1c1ca5cfc5777
+- [Features](#features)
+- [How to Play](#how-to-play)
+- [Winning Conditions](#winning-conditions)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- Randomized starting balance between $100 and $2000.
+- 56 unique financial scenarios with different choices and outcomes.
+- Track your financial decisions and their impact on your balance.
+- Endgame summary showing performance and potential rewards.
+
+## How to Play
+
+1. **Starting the Game**: Run the game script to start playing.
+2. **Making Decisions**: You will be presented with a financial scenario and three choices. Each choice will have a different financial outcome (gain or loss).
+3. **Tracking Balance**: Your balance will change based on your choices. Make sure to keep an eye on it!
+4. **Completing Scenarios**: You will play a total of 15 scenarios. The game ends if you run out of money or complete all scenarios.
+
+## Winning Conditions
+
+- If your final balance is greater than your starting balance, you win!
+- If your performance percentage is 75% or higher, you earn a coupon.
+- If your balance drops to zero or below, you lose the game.
+
+## Installation
+
+To run the game, you'll need Python installed on your computer. Follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/financial-decision-game.git
