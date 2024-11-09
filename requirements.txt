@@ -1,2 +1,0 @@
-requests  # For making API calls (e.g., Walmart API)
-scipy     # For optimization (e.g., linear programming)
