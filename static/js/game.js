@@ -172,13 +172,13 @@ class FinancialGame {
         let rewardText = '';
         if (summary.final_balance >= 3250) {
             rewardImage = '/static/assets/images/gold-reward.png';
-            rewardText = 'Gold Reward: 30% off at participating restaurants!';
+            rewardText = 'Gold Reward: 10% off at participating restaurants!';
         } else if (summary.final_balance >= 3000) {
             rewardImage = '/static/assets/images/silver-reward.png';
-            rewardText = 'Silver Reward: 20% off at participating restaurants!';
+            rewardText = 'Silver Reward: 7.5% off at participating restaurants!';
         } else if (summary.final_balance >= 2750) {
             rewardImage = '/static/assets/images/bronze-reward.png';
-            rewardText = 'Bronze Reward: 10% off at participating restaurants!';
+            rewardText = 'Bronze Reward: 5% off at participating restaurants!';
         }
     
         const modalContent = `
