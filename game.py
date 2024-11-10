@@ -362,7 +362,7 @@ class FinancialGameEngine:
             'total_gain': total_gain,
             'performance_score': performance_score,
             'game_history': self.player.game_history,
-            'skills': self.player.skills,
+            'skills': self.player.skills
         }
 
 # Global game instance
