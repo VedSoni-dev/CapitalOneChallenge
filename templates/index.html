@@ -2,293 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Financial Life Simulator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Financial Survival Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --background-color: #f4f6f7;
-            --text-color: #2c3e50;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            perspective: 1000px;
-        }
-
-        #game-container {
-            width: 90%;
-            max-width: 600px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #game-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            font-family: 'Open Sans', sans-serif;
+            background-color: #2c3e50;
             color: white;
+            line-height: 1.6;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
             padding: 20px;
             text-align: center;
         }
-
-        #game-stats {
+        .status-bar {
             display: flex;
-            justify-content: space-around;
-            background: #f1f3f4;
-            padding: 15px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        #scenario-section {
-            padding: 20px;
-            text-align: center;
-        }
-
-        #scenario-question {
-            font-size: 1.2em;
+            justify-content: space-between;
+            background-color: #34495e;
+            padding: 10px;
+            border-radius: 5px;
             margin-bottom: 20px;
-            font-weight: bold;
         }
-
+        .scenario {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .choices {
+            display: grid;
+            gap: 10px;
+        }
         .choice-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            background-color: var(--primary-color);
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s;
         }
-
         .choice-btn:hover {
-            transform: scale(1.05);
             background-color: #2980b9;
         }
-
-        #feedback-display {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #e8f4f8;
-        }
-
-        #game-summary {
-            background-color: #f1f3f4;
-            padding: 20px;
+        .start-screen {
             text-align: center;
+            padding: 50px 20px;
         }
-
-        #skills-display {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-        }
-
-        .skill-bar {
-            width: 200px;
-            background-color: #e0e0e0;
-            border-radius: 13px;
-            padding: 3px;
-        }
-
-        .skill-bar-fill {
-            height: 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 10px;
-            transition: width 0.5s ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .animated-pulse {
-            animation: pulse 1.5s infinite;
+        .start-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="game-header">
-            <h1>Financial Life Simulator</h1>
+    <div class="game-container" id="gameContainer">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <h1>Financial Survival</h1>
+            <p>Can you survive 30 days with limited resources?</p>
+            <button class="start-btn" onclick="startGame()">Start Game</button>
         </div>
 
-        <div id="game-stats">
-            <div class="stat-item">
-                <strong>Balance:</strong> 
-                <span id="balance-display">$0</span>
+        <!-- Game Screen (Hidden Initially) -->
+        <div id="gameScreen" style="display:none;">
+            <div class="status-bar">
+                <div>Balance: $<span id="balanceDisplay">0</span></div>
+                <div>Day: <span id="dayDisplay">0</span></div>
             </div>
-            <div class="stat-item">
-                <strong>Scenarios:</strong> 
-                <span id="scenario-count">0/5</span>
+
+            <div class="scenario" id="scenarioText">
+                Welcome to the game
             </div>
-        </div>
 
-        <div id="scenario-section">
-            <div id="scenario-question">Welcome to the Financial Life Simulator!</div>
-            <div id="choice-buttons"></div>
-        </div>
-
-        <div id="feedback-display"></div>
-
-        <div id="skills-display">
-            <div>
-                <div>Financial Literacy</div>
-                <div class="skill-bar">
-                    <div id="financial-literacy-bar" class="skill-bar-fill" style="width: 0%;"></div>
-                </div>
-            </div>
-            <div>
-                <div>Risk Management</div>
-                <div class="skill-bar">
-                    <div id="risk-management-bar" class="skill-bar-fill" style="width: 0%;"></div>
-                </div>
+            <div class="choices" id="choicesContainer">
+                <!-- Choices will be dynamically populated -->
             </div>
         </div>
-
-        <div id="game-summary" style="display: none;">
-            <h2>Game Over!</h2>
-            <div id="summary-details"></div>
-            <button id="restart-btn" class="choice-btn">Restart Game</button>
-        </div>
-
-        <button id="start-btn" class="choice-btn animated-pulse">Start Your Financial Journey</button>
     </div>
 
     <script>
-        const balanceDisplay = document.getElementById('balance-display');
-        const scenarioQuestion = document.getElementById('scenario-question');
-        const choiceButtons = document.getElementById('choice-buttons');
-        const startBtn = document.getElementById('start-btn');
-        const feedbackDisplay = document.getElementById('feedback-display');
-        const scenarioCountDisplay = document.getElementById('scenario-count');
-        const gameSummary = document.getElementById('game-summary');
-        const summaryDetails = document.getElementById('summary-details');
-        const restartBtn = document.getElementById('restart-btn');
+        let currentGameId = null;
 
-        const financialLiteracyBar = document.getElementById('financial-literacy-bar');
-        const riskManagementBar = document.getElementById('risk-management-bar');
-
-        let currentScenarioIndex = null;
-        let scenarioCount = 0;
-
-        startBtn.addEventListener('click', startGame);
-        restartBtn.addEventListener('click', startGame);
-
-        async function startGame() {
-            startBtn.style.display = 'none';
-            gameSummary.style.display = 'none';
-            feedbackDisplay.textContent = '';
-            scenarioCount = 0;
-            scenarioCountDisplay.textContent = '0/5';
-
-            try {
-                const response = await fetch('/start_game');
-                const data = await response.json();
-                balanceDisplay.textContent = `$${data.balance}`;
-                fetchNextScenario();
-            } catch (error) {
-                console.error('Game start error:', error);
-            }
+        function startGame() {
+            fetch('/start_game')
+                .then(response => response.json())
+                .then(data => {
+                    currentGameId = data.game_id;
+                    document.getElementById('startScreen').style.display = 'none';
+                    document.getElementById('gameScreen').style.display = 'block';
+                    document.getElementById('balanceDisplay').textContent = data.initial_balance;
+                    document.getElementById('dayDisplay').textContent = data.day;
+                    getNextScenario();
+                });
         }
 
-        async function fetchNextScenario() {
-            try {
-                const response = await fetch('/get_scenario');
-                const scenario = await response.json();
-                currentScenarioIndex = scenario.scenario_index;
-                displayScenario(scenario);
-            } catch (error) {
-                console.error('Scenario fetch error:', error);
-            }
+        function getNextScenario() {
+            fetch('/get_scenario')
+                .then(response => response.json())
+                .then(scenario => {
+                    document.getElementById('scenarioText').textContent = scenario.question;
+                    const choicesContainer = document.getElementById('choicesContainer');
+                    choicesContainer.innerHTML = '';
+
+                    scenario.choices.forEach((choice, index) => {
+                        const choiceBtn = document.createElement('button');
+                        choiceBtn.textContent = choice;
+                        choiceBtn.classList.add('choice-btn');
+                        choiceBtn.onclick = () => playScenario(scenario.scenario_index, index);
+                        choicesContainer.appendChild(choiceBtn);
+                    });
+                });
         }
 
-        function displayScenario(scenario) {
-            scenarioQuestion.textContent = scenario.question;
-            choiceButtons.innerHTML = '';
-
-            scenario.choices.forEach((choice, index) => {
-                const button = document.createElement('button');
-                button.textContent = choice;
-                button.classList.add('choice-btn');
-                button.addEventListener('click', () => selectChoice(index));
-                choiceButtons.appendChild(button);
-            });
-        } function selectChoice(choiceIndex) {
-            feedbackDisplay.textContent = 'Processing your choice...';
-            choiceButtons.innerHTML = '';
-
+        function playScenario(scenarioIndex, choiceIndex) {
             fetch('/play_scenario', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    scenario_index: currentScenarioIndex,
+                    scenario_index: scenarioIndex,
                     choice_index: choiceIndex
                 })
             })
             .then(response => response.json())
             .then(result => {
-                updateGameState(result);
-            })
-            .catch(error => {
-                console.error('Error playing scenario:', error);
+                if (result.game_over) {
+                    endGame(result);
+                } else {
+                    document.getElementById('balanceDisplay').textContent = result.balance;
+                    document.getElementById('dayDisplay').textContent = result.day;
+                    getNextScenario();
+                }
             });
         }
 
-        function updateGameState(result) {
-            balanceDisplay.textContent = `$${result.balance}`;
-            scenarioCount++;
-            scenarioCountDisplay.textContent = `${scenarioCount}/5`;
-            feedbackDisplay.textContent = `You chose: ${result.choice}. Outcome: ${result.outcome}. ${result.consequence}`;
-
-            if (result.game_over) {
-                displayGameSummary(result);
-            } else {
-                fetchNextScenario();
-            }
-
-            // Update skill bars
-            financialLiteracyBar.style.width = `${Math.min(100, (result.skills.financial_literacy || 0))}%`;
-            riskManagementBar.style.width = `${Math.min(100, (result.skills.risk_management || 0))}%`;
-        }
-
-        function displayGameSummary(result) {
-            gameSummary.style.display = 'block';
-            summaryDetails.innerHTML = `
-                <p>Initial Balance: $${result.initial_balance}</p>
-                <p>Final Balance: $${result.final_balance}</p>
-                <p>Total Gain: $${result.total_gain}</p>
-                <p>Performance Score: ${result.performance_score.toFixed(2)}%</p>
-                <h3>Game History:</h3>
-                <ul>
-                    ${result.game_history.map(entry => `<li>${entry.timestamp}: ${entry.scenario} - ${entry.choice} (Outcome: $${entry.outcome})</li>`).join('')}
-                </ul>
+        function endGame(summary) {
+            // Implement game over screen
+            document.getElementById('gameScreen').innerHTML = `
+                <h2>Game Over</h2>
+                <p>Final Balance: $${summary.final_balance}</p>
+                <p>Performance Score: ${summary.performance_score.toFixed(2)}%</p>
+                <button onclick="location.reload()">Play Again</button>
             `;
         }
     </script>
