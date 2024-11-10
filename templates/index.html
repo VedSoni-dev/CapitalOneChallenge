@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Survival Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
+</head>
+<body>
+    <div class="game-container" id="gameContainer">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <h1 class="game-title">Financial Survival</h1>
+            <p class="game-subtitle">Master your finances, survive the market!</p>
+            <div class="start-content">
+                <div class="game-features">
+                    <div class="feature">
+                        <img src="/static/assets/images/money-icon.png" alt="Money" class="feature-icon">
+                        <h3>Manage Resources</h3>
+                        <p>Make critical financial decisions</p>
+                    </div>
+                    <div class="feature">
+                        <img src="/static/assets/images/chart-icon.webp" alt="Chart" class="feature-icon">
+                        <h3>Track Progress</h3>
+                        <p>Watch your wealth grow</p>
+                    </div>
+                </div>
+                <button class="start-btn pulse" id="startBtn">Start Game</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" style="display:none;">
+            <div class="status-bar">
+                <div class="status-item">
+                    <img src="/static/assets/images/money-icon.png" alt="Balance" class="status-icon">
+                    <div class="status-text">
+                        <span class="status-label">Balance</span>
+                        <span class="status-value" id="balanceDisplay">$0</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <img src="/static/assets/images/calendar-icon.png" alt="Day" class="status-icon">
+                    <div class="status-text">
+                        <span class="status-label">Day</span>
+                        <span class="status-value" id="dayDisplay">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario fade-in" id="scenarioContainer">
+                <div class="scenario-text" id="scenarioText"></div>
+                <div class="choices" id="choicesContainer"></div>
+            </div>
+
+            <div class="game-stats">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Decisions Made</span>
+                        <span class="stat-value" id="decisionsDisplay">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Success Rate</span>
+                        <span class="stat-value" id="successRateDisplay">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates for dynamic content -->
+    <template id="choiceTemplate">
+        <button class="choice-btn choice-hover">
+            <span class="choice-text"></span>
+            <span class="choice-icon">→</span>
+        </button>
+    </template>
+
+    <!-- Scripts -->
+    <script type="module" src="/static/js/utils.js"></script>
+    <script type="module" src="/static/js/animations.js"></script>
+    <script type="module" src="/static/js/game.js"></script>
+
+    <script type="module">
+        import GameUtils from '/static/js/utils.js';
+        import GameAnimations from '/static/js/animations.js';
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new FinancialGame();
+            window.game = game; // Make it accessible globally
+        });
+    </script>
+</body>
+</html>
