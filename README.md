@@ -1,41 +1,51 @@
-# Financial Decision Making Game
-
+Financial Decision Making Game 💰
 Welcome to the Financial Decision Making Game! This interactive game challenges players to make smart financial decisions through various scenarios. Your goal is to manage your money wisely and achieve a positive outcome by the end of the game.
 
-## Table of Contents
+Features
+Randomized Starting Balance: Begin with a balance between $100 and $2000.
+Unique Scenarios: Encounter 56 diverse financial scenarios with different choices and consequences.
+Track Your Progress: See how your decisions impact your balance.
+Endgame Summary: Review your performance and potential rewards.
+How to Play
+Start the Game: Run the game script to begin.
+Make Decisions: Each scenario presents three choices, each with a different financial outcome.
+Manage Your Balance: Keep track of your money as it fluctuates based on your choices.
+Complete Scenarios: Play through 15 scenarios. The game ends if you run out of money or complete all scenarios.
+Winning Conditions
+Positive Balance: If your final balance is greater than your starting balance, you win!
+High Performance: Achieve a performance percentage of 75% or higher to earn a coupon.
+Losing Condition: Your balance drops to zero or below, and you lose the game.
+Installation
+Clone the Repository:
+bash
+Insert Code
+Edit
+Copy code
+git clone https://github.com/yourusername/financial-decision-game.git
+Install Dependencies:
+bash
+Insert Code
+Edit
+Copy code
+pip install -r requirements.txt
+Running the Game
+Navigate to the Project Directory:
+bash
+Insert Code
+Edit
+Copy code
+cd financial-decision-game
+Run the Game Script:
+bash
+Insert Code
+Edit
+Copy code
+python main.py
+Contributing
+Contributions are welcome! Feel free to submit issues or pull requests.
 
-- [Features](#features)
-- [How to Play](#how-to-play)
-- [Winning Conditions](#winning-conditions)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+License
+This project is licensed under the MIT License.
 
-## Features
-
-- Randomized starting balance between $100 and $2000.
-- 56 unique financial scenarios with different choices and outcomes.
-- Track your financial decisions and their impact on your balance.
-- Endgame summary showing performance and potential rewards.
-
-## How to Play
-
-1. **Starting the Game**: Run the game script to start playing.
-2. **Making Decisions**: You will be presented with a financial scenario and three choices. Each choice will have a different financial outcome (gain or loss).
-3. **Tracking Balance**: Your balance will change based on your choices. Make sure to keep an eye on it!
-4. **Completing Scenarios**: You will play a total of 15 scenarios. The game ends if you run out of money or complete all scenarios.
-
-## Winning Conditions
-
-- If your final balance is greater than your starting balance, you win!
-- If your performance percentage is 75% or higher, you earn a coupon.
-- If your balance drops to zero or below, you lose the game.
-
-## Installation
-
-To run the game, you'll need Python installed on your computer. Follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/financial-decision-game.git
+Contact
+For any questions or suggestions, feel free to contact me at ved.soni@tamu.edu
