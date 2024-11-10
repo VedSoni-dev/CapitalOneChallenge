@@ -1,3 +1,6 @@
+
+
+
 class FinancialGame {
     constructor() {
         this.balance = 0;

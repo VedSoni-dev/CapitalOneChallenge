@@ -3,36 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Survival Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>FinancingForFood</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/animations.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #2ecc71;
+            --text-color: #ecf0f1;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(52, 73, 94, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .game-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .game-subtitle {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        .start-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .start-btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto 0;
+            padding: 1.2rem 2.4rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-color);
+            background: var(--accent-color);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+            background: #27ae60;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Game Screen Styles */
+        #gameScreen {
+            display: none;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .scenario {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0;
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            background: #27ae60;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+    </style>
 </head>
 <body>
     <div class="game-container" id="gameContainer">
-        <!-- Start Screen -->
         <div class="start-screen" id="startScreen">
-            <h1 class="game-title">Financial Survival</h1>
-            <p class="game-subtitle">Master your finances, survive the market!</p>
+            <h1 class="game-title">FinancingForFood</h1>
+            <p class="game-subtitle">Your Financial Survival Challenge</p>
             <div class="start-content">
-                <div class="game-features">
-                    <div class="feature">
-                        <img src="/static/assets/images/money-icon.png" alt="Money" class="feature-icon">
-                        <h3>Manage Resources</h3>
-                        <p>Make critical financial decisions</p>
-                    </div>
-                    <div class="feature">
-                        <img src="/static/assets/images/chart-icon.webp" alt="Chart" class="feature-icon">
-                        <h3>Track Progress</h3>
-                        <p>Watch your wealth grow</p>
-                    </div>
+                <div class="section">
+                    <h3>Welcome to FinancingForFood</h3>
+                    <p>FinancingForFood is an interactive financial decision-making game designed to test and improve your financial literacy. Navigate through real-life financial scenarios, make critical choices, and learn how to manage your money effectively.</p>
                 </div>
-                <button class="start-btn pulse" id="startBtn">Start Game</button>
+
+                <div class="section">
+                    <h3>Game Overview</h3>
+                    <ul>
+                        <li>Start with a random initial balance between $100 and $2000</li>
+                        <li>Face 15 unique financial scenarios</li>
+                        <li>Make choices that impact your financial health</li>
+                        <li>Goal: Increase your balance and demonstrate financial wisdom</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>Winning Conditions</h3>
+                    <ul>
+                        <li>Finish with a balance higher than your starting amount</li>
+                        <li>Achieve a performance score of 75% or higher</li>
+                        <li>Survive all 15 scenarios without going broke</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>How to Play</h3>
+                    <ol>
+                        <li>Click "Start Game" to begin your financial journey</li>
+                        <li>Read each scenario carefully</li>
+                        <li>Choose the best financial option</li>
+                        <li>Watch your balance and track your progress</li>
+                        <li>Learn from each decision and improve your financial skills</li>
+                    </ol>
+                </div>
+
+                <button class="start-btn pulse" id="startBtn" onclick="startGame()">START FINANCIAL JOURNEY</button>
             </div>
         </div>
 
-        <!-- Game Screen -->
-        <div id="gameScreen" style="display:none;">
+        <div id="gameScreen">
             <div class="status-bar">
                 <div class="status-item">
                     <img src="/static/assets/images/money-icon.png" alt="Balance" class="status-icon">
@@ -45,7 +235,7 @@
                     <img src="/static/assets/images/calendar-icon.png" alt="Day" class="status-icon">
                     <div class="status-text">
                         <span class="status-label">Day</span>
-                        <span class="status-value" id="dayDisplay">0</span>
+                        <span class="status-value" id="dayDisplay">1</span>
                     </div>
                 </div>
             </div>
@@ -54,44 +244,64 @@
                 <div class="scenario-text" id="scenarioText"></div>
                 <div class="choices" id="choicesContainer"></div>
             </div>
-
-            <div class="game-stats">
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <span class="stat-label">Decisions Made</span>
-                        <span class="stat-value" id="decisionsDisplay">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Success Rate</span>
-                        <span class="stat-value" id="successRateDisplay">0%</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Templates for dynamic content -->
-    <template id="choiceTemplate">
-        <button class="choice-btn choice-hover">
-            <span class="choice-text"></span>
-            <span class="choice-icon">→</span>
-        </button>
-    </template>
+    <script>
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            
+            const initialBalance = Math.floor(Math.random() * (2000 - 100 + 1)) + 100;
+            document.getElementById('balanceDisplay').textContent = `$${initialBalance}`;
+            
+            loadScenario(1);
+        }
 
-    <!-- Scripts -->
+        function loadScenario(day) {
+            const scenarios = {
+                1: {
+                    text: "You receive an unexpected bill for $500. What do you do?",
+                    choices: [
+                        "Pay it immediately from savings",
+                        "Set up a payment plan",
+                        "Ignore it for now"
+                    ]
+                }
+            };
+
+            const scenario = scenarios[day];
+            document.getElementById('scenarioText').textContent = scenario.text;
+            
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+            
+            scenario.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.innerHTML = `
+                    <span class="choice-text">${choice}</span>
+                    <span class="choice-icon">→</span>
+                `;
+                button.onclick = () => makeChoice(index);
+                choicesContainer.appendChild(button);
+            });
+        }
+
+        function makeChoice(choiceIndex) {
+            const currentDay = parseInt(document.getElementById('dayDisplay').textContent);
+            if (currentDay < 15) {
+                document.getElementById('dayDisplay').textContent = currentDay + 1;
+                loadScenario(1); // For demo, always loads first scenario
+            } else {
+                alert('Game Over! Thanks for playing!');
+                location.reload();
+            }
+        }
+    </script>
+
     <script type="module" src="/static/js/utils.js"></script>
     <script type="module" src="/static/js/animations.js"></script>
     <script type="module" src="/static/js/game.js"></script>
-
-    <script type="module">
-        import GameUtils from '/static/js/utils.js';
-        import GameAnimations from '/static/js/animations.js';
-        
-        // Initialize game when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            const game = new FinancialGame();
-            window.game = game; // Make it accessible globally
-        });
-    </script>
 </body>
 </html>
