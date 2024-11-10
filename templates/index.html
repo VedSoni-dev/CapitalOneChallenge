@@ -2,163 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Survival Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #2c3e50;
-            color: white;
-            line-height: 1.6;
-        }
-        .game-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            background-color: #34495e;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .scenario {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .choices {
-            display: grid;
-            gap: 10px;
-        }
-        .choice-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .choice-btn:hover {
-            background-color: #2980b9;
-        }
-        .start-screen {
-            text-align: center;
-            padding: 50px 20px;
-        }
-        .start-btn {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
 </head>
 <body>
     <div class="game-container" id="gameContainer">
         <!-- Start Screen -->
         <div class="start-screen" id="startScreen">
-            <h1>Financial Survival</h1>
-            <p>Can you survive 30 days with limited resources?</p>
-            <button class="start-btn" onclick="startGame()">Start Game</button>
+            <h1 class="game-title">Financial Survival</h1>
+            <p class="game-subtitle">Master your finances, survive the market!</p>
+            <div class="start-content">
+                <div class="game-features">
+                    <div class="feature">
+                        <img src="/static/assets/images/money-icon.svg" alt="Money" class="feature-icon">
+                        <h3>Manage Resources</h3>
+                        <p>Make critical financial decisions</p>
+                    </div>
+                    <div class="feature">
+                        <img src="/static/assets/images/chart-icon.svg" alt="Chart" class="feature-icon">
+                        <h3>Track Progress</h3>
+                        <p>Watch your wealth grow</p>
+                    </div>
+                </div>
+                <button class="start-btn pulse" id="startBtn">Start Game</button>
+            </div>
         </div>
 
-        <!-- Game Screen (Hidden Initially) -->
+        <!-- Game Screen -->
         <div id="gameScreen" style="display:none;">
             <div class="status-bar">
-                <div>Balance: $<span id="balanceDisplay">0</span></div>
-                <div>Day: <span id="dayDisplay">0</span></div>
+                <div class="status-item">
+                    <img src="/static/assets/images/money-icon.svg" alt="Balance" class="status-icon">
+                    <div class="status-text">
+                        <span class="status-label">Balance</span>
+                        <span class="status-value" id="balanceDisplay">$0</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <img src="/static/assets/images/calendar-icon.svg" alt="Day" class="status-icon">
+                    <div class="status-text">
+                        <span class="status-label">Day</span>
+                        <span class="status-value" id="dayDisplay">0</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="scenario" id="scenarioText">
-                Welcome to the game
+            <div class="scenario fade-in" id="scenarioContainer">
+                <div class="scenario-text" id="scenarioText"></div>
+                <div class="choices" id="choicesContainer"></div>
             </div>
 
-            <div class="choices" id="choicesContainer">
-                <!-- Choices will be dynamically populated -->
+            <div class="game-stats">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Decisions Made</span>
+                        <span class="stat-value" id="decisionsDisplay">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Success Rate</span>
+                        <span class="stat-value" id="successRateDisplay">0%</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentGameId = null;
+    <!-- Templates for dynamic content -->
+    <template id="choiceTemplate">
+        <button class="choice-btn choice-hover">
+            <span class="choice-text"></span>
+            <span class="choice-icon">→</span>
+        </button>
+    </template>
 
-        function startGame() {
-            fetch('/start_game')
-                .then(response => response.json())
-                .then(data => {
-                    currentGameId = data.game_id;
-                    document.getElementById('startScreen').style.display = 'none';
-                    document.getElementById('gameScreen').style.display = 'block';
-                    document.getElementById('balanceDisplay').textContent = data.initial_balance;
-                    document.getElementById('dayDisplay').textContent = data.day;
-                    getNextScenario();
-                });
-        }
+    <!-- Scripts -->
+    <script type="module" src="/static/js/utils.js"></script>
+    <script type="module" src="/static/js/animations.js"></script>
+    <script type="module" src="/static/js/game.js"></script>
 
-        function getNextScenario() {
-            fetch('/get_scenario')
-                .then(response => response.json())
-                .then(scenario => {
-                    document.getElementById('scenarioText').textContent = scenario.question;
-                    const choicesContainer = document.getElementById('choicesContainer');
-                    choicesContainer.innerHTML = '';
-
-                    scenario.choices.forEach((choice, index) => {
-                        const choiceBtn = document.createElement('button');
-                        choiceBtn.textContent = choice;
-                        choiceBtn.classList.add('choice-btn');
-                        choiceBtn.onclick = () => playScenario(scenario.scenario_index, index);
-                        choicesContainer.appendChild(choiceBtn);
-                    });
-                });
-        }
-
-        function playScenario(scenarioIndex, choiceIndex) {
-            fetch('/play_scenario', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    scenario_index: scenarioIndex,
-                    choice_index: choiceIndex
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.game_over) {
-                    endGame(result);
-                } else {
-                    document.getElementById('balanceDisplay').textContent = result.balance;
-                    document.getElementById('dayDisplay').textContent = result.day;
-                    getNextScenario();
-                }
-            });
-        }
-
-        function endGame(summary) {
-            // Implement game over screen
-            document.getElementById('gameScreen').innerHTML = `
-                <h2>Game Over</h2>
-                <p>Final Balance: $${summary.final_balance}</p>
-                <p>Performance Score: ${summary.performance_score.toFixed(2)}%</p>
-                <button onclick="location.reload()">Play Again</button>
-            `;
-        }
+    <script type="module">
+        import GameUtils from '/static/js/utils.js';
+        import GameAnimations from '/static/js/animations.js';
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new FinancialGame();
+            window.game = game; // Make it accessible globally
+        });
     </script>
 </body>
 </html>
