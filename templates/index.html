@@ -135,7 +135,7 @@
         .start-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(50, 105, 225, 0.3);
         }
 
         .start-btn::after {
@@ -305,6 +305,71 @@
             transform: translateY(20px);
         }
 
+        /* Import new font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .scenario {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            font-size: 1.4rem; /* Increase question font size */
+            transition: transform 0.3s ease;
+            color: var(--text);
+        }
+
+        .choices {
+            display: grid;
+            gap: 2rem; /* Increase spacing between choices */
+            margin-top: 2.5rem;
+        }
+
+        .choice-btn {
+            background: var(--secondary);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            font-size: 1.3rem; /* Increase choice font size */
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .choice-btn:hover {
+            background: var(--success-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+        }
+
+        .choice-btn:active {
+            transform: scale(0.98);
+        }
+
+        .rules-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .rules-list li {
+            font-size: 1.2rem; /* Larger font for rule items */
+            color: #cbd5e0;
+            padding: 1rem 0;
+        }
+
+
     </style>
 </head>
 <body>
@@ -391,6 +456,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         // Create floating particles

@@ -168,10 +168,8 @@ class FinancialGame {
     }
 
     endGame(summary) {
-        // Determine which reward image to show based on final balance
         let rewardImage = '';
         let rewardText = '';
-        
         if (summary.final_balance >= 3250) {
             rewardImage = '/static/assets/images/gold-reward.png';
             rewardText = 'Gold Reward: 30% off at participating restaurants!';
@@ -182,13 +180,9 @@ class FinancialGame {
             rewardImage = '/static/assets/images/bronze-reward.png';
             rewardText = 'Bronze Reward: 10% off at participating restaurants!';
         }
-
-        
-
-
-
+    
         const modalContent = `
-            <h2>Game Over</h2>
+            <h2 class="modal-title">Game Over</h2>
             <div class="summary-stats">
                 <div class="stat">
                     <span class="stat-label">Final Balance</span>
@@ -207,11 +201,10 @@ class FinancialGame {
                 <div class="reward-container">
                     <img src="${rewardImage}" alt="Reward" class="reward-image" />
                     <p class="reward-text">${rewardText}</p>
-                </div>
-            ` : ''}
+                </div>` : ''}
             <button class="restart-btn" onclick="location.reload()">Play Again</button>
         `;
-        
+    
         this.showModal(modalContent);
     }
 
