@@ -4,6 +4,7 @@ class FinancialGame {
         this.day = 0;
         this.gameHistory = [];
         this.currentScenario = null;
+        this.decisionsMade = 0;
         this.setupEventListeners();
     }
 
@@ -69,6 +70,20 @@ class FinancialGame {
         }, 300);
     }
 
+    updateDecisionsCounter() {
+        const decisionsDisplay = document.getElementById('decisionsDisplay');
+        if (decisionsDisplay) {
+            decisionsDisplay.textContent = this.decisionsMade;
+            
+            // Optional: Add animation for visual feedback
+            decisionsDisplay.classList.add('counter-update');
+            setTimeout(() => {
+                decisionsDisplay.classList.remove('counter-update');
+            }, 500);
+        }
+    }
+
+
     createChoiceButton(choice, index, scenarioIndex) {
         const button = document.createElement('button');
         button.textContent = choice;
@@ -91,6 +106,9 @@ class FinancialGame {
             });
             
             const result = await response.json();
+
+            this.decisionsMade++;
+            this.updateDecisionsCounter();
             
             if (result.game_over) {
                 this.endGame(result);
