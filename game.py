@@ -356,13 +356,26 @@ class FinancialGameEngine:
         total_gain = self.player.balance - self.player.initial_balance
         performance_score = (self.player.balance / self.player.initial_balance) * 100
         
+
+
+        reward_tier = None
+        if self.player.balance >= 3250:
+            reward_tier = 'gold'
+        elif self.player.balance >= 3000:
+            reward_tier = 'silver'
+        elif self.player.balance >= 2750:
+            reward_tier = 'bronze'
+
+
         return {
             'initial_balance': self.player.initial_balance,
             'final_balance': self.player.balance,
             'total_gain': total_gain,
             'performance_score': performance_score,
             'game_history': self.player.game_history,
-            'skills': self.player.skills
+            'skills': self.player.skills,
+            'reward_tier': reward_tier,
+            'day': len(self.player.game_history)
         }
 
 # Global game instance

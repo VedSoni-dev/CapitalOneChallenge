@@ -40,7 +40,7 @@ class FinancialGame {
             this.updateScenario(scenario);
             this.animateScenarioTransition();
         } catch (error) {
-            this.showError('Failed to get next scenario');
+            this.showError('');
         }
     }
 
@@ -168,6 +168,25 @@ class FinancialGame {
     }
 
     endGame(summary) {
+        // Determine which reward image to show based on final balance
+        let rewardImage = '';
+        let rewardText = '';
+        
+        if (summary.final_balance >= 3250) {
+            rewardImage = '/static/assets/images/gold-reward.png';
+            rewardText = 'Gold Reward: 30% off at participating restaurants!';
+        } else if (summary.final_balance >= 3000) {
+            rewardImage = '/static/assets/images/silver-reward.png';
+            rewardText = 'Silver Reward: 20% off at participating restaurants!';
+        } else if (summary.final_balance >= 2750) {
+            rewardImage = '/static/assets/images/bronze-reward.png';
+            rewardText = 'Bronze Reward: 10% off at participating restaurants!';
+        }
+
+        
+
+
+
         const modalContent = `
             <h2>Game Over</h2>
             <div class="summary-stats">
@@ -184,6 +203,12 @@ class FinancialGame {
                     <span class="stat-value">${summary.day}</span>
                 </div>
             </div>
+            ${rewardImage ? `
+                <div class="reward-container">
+                    <img src="${rewardImage}" alt="Reward" class="reward-image" />
+                    <p class="reward-text">${rewardText}</p>
+                </div>
+            ` : ''}
             <button class="restart-btn" onclick="location.reload()">Play Again</button>
         `;
         
@@ -201,31 +226,88 @@ class FinancialGame {
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
         
+        // Add CSS for reward styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .reward-container {
+                text-align: center;
+                margin: 20px 0;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            .reward-image {
+                max-width: 200px;
+                height: auto;
+                margin-bottom: 10px;
+                animation: scaleIn 0.5s ease-out;
+            }
+
+            .reward-text {
+                color: #ffd700;
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin: 10px 0;
+                animation: slideIn 0.5s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            @keyframes scaleIn {
+                from { transform: scale(0); }
+                to { transform: scale(1); }
+            }
+
+            @keyframes slideIn {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+
+            .modal {
+                background: var(--card-bg);
+                padding: 2rem;
+                border-radius: 1rem;
+                max-width: 500px;
+                width: 90%;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .modal.active,
+            .overlay.active {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+        
         // Trigger reflow before adding active class
         modal.offsetHeight;
         
         overlay.classList.add('active');
         modal.classList.add('active');
-    }
-
-    showError(message) {
-        const errorToast = document.createElement('div');
-        errorToast.className = 'error-toast';
-        errorToast.textContent = message;
-        document.body.appendChild(errorToast);
-        
-        // Add active class after a brief delay to trigger animation
-        setTimeout(() => {
-            errorToast.classList.add('active');
-        }, 10);
-        
-        // Remove the toast after 3 seconds
-        setTimeout(() => {
-            errorToast.classList.remove('active');
-            setTimeout(() => {
-                errorToast.remove();
-            }, 300); // Wait for fade-out animation to complete
-        }, 3000);
     }
 }
 
