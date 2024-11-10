@@ -1,4 +1,7 @@
 import random
+from flask import Flask, render_template, jsonify, request
+
+app = Flask(__name__)
 
 # Define financial scenarios
 def generate_scenario():
@@ -239,10 +242,6 @@ def provide_feedback(outcome):
     else:
         return "Bad choice! You lost money."
 
-# Replace the FinancialGame class and simulation code with this:
-
-import random
-
 class FinancialGame:
     def __init__(self):
         self.balance = round(random.uniform(100, 2000), 2)  # Random starting balance between 100 and 2000
@@ -250,22 +249,8 @@ class FinancialGame:
         self.scenario_count = 0
         self.history = []
 
-    def play_round(self):
+    def play_round(self, user_choice):
         scenario = generate_scenario()
-        print("\n" + "="*50)
-        print(scenario['question'])
-        for i, choice in enumerate(scenario['choices']):
-            print(f"{i + 1}. {choice}")
-
-        while True:
-            try:
-                user_choice = int(input("\nEnter your choice (1-3): ")) - 1
-                if 0 <= user_choice <= 2:
-                    break
-                print("Please enter a number between 1 and 3.")
-            except ValueError:
-                print("Please enter a valid number.")
-
         outcome = scenario['outcomes'][user_choice]
         self.balance += outcome
         feedback = provide_feedback(outcome)
@@ -277,197 +262,97 @@ class FinancialGame:
             'outcome': outcome
         })
         
-        print(f"\nYou chose: {scenario['choices'][user_choice]}")
-        print(f"Outcome: {'gain' if outcome > 0 else 'loss'} of ${abs(outcome)}")
-        print(feedback)
-        
         self.scenario_count += 1
+
+        return {
+            'scenario': scenario,
+            'balance': self.balance,
+            'outcome': outcome,
+            'feedback': feedback,
+            'scenario_count': self.scenario_count
+        }
 
     def check_status(self):
         if self.balance <= 0:
-            print("\n💸 You have gone broke! Game Over.")
             return False
-        if self.scenario_count >= 5:  # Changed to 15 scenarios
-            print("\n🎉 Congratulations! You've completed all 15 scenarios!")
+        if self.scenario_count >= 5:
             return False
         return True
 
     def show_summary(self):
-        print("\n" + "="*50)
-        print("GAME SUMMARY")
-        print("="*50)
-        print(f"Starting balance: ${self.initial_balance:.2f}")
-        print(f"Final balance: ${self.balance:.2f}")
-        
         profit_loss = self.balance - self.initial_balance
-        print(f"Total {'profit' if profit_loss >= 0 else 'loss'}: ${abs(profit_loss):.2f}")
-        print(f"Scenarios played: {self.scenario_count}")
-        
-        # Calculate performance percentage
         performance = (self.balance / self.initial_balance) * 100
-        print(f"Performance: {performance:.1f}%")
         
-        # Check win/lose conditions
-        if performance < 50 or profit_loss < -1000:
-            print("\n💸 You have lost the game! Better luck next time.")
-        else:
-            coupon = 0  # Default coupon value
-            if 75 <= performance < 100:
-                coupon = 5
-            elif 100 <= performance < 125:
-                coupon = 7.5
-            elif performance >= 125:
-                coupon = 10
-            
-            if coupon > 0:
-                print(f"\n🎉 Congratulations! You won a {coupon}% off coupon!")
-            else:
-                print("\n🙂 You completed the game but did not earn a coupon.")
-        
-        # Display the journey history
-        if self.history:
-            print("\nYour Journey:")
-            for i, round in enumerate(self.history, 1):
-                print(f"\n{i}. Scenario: {round['scenario']}")
-                print(f"   Choice: {round['choice']}")
-                print(f"   Outcome: ${round['outcome']}")
+        # Coupon calculation
+        coupon = 0
+        if 50 < performance:
+            coupon = 2.5
+        if 75 <= performance < 100:
+            coupon = 5
+        elif 100 <= performance < 125:
+            coupon = 7.5
+        elif performance >= 125:
+            coupon = 10
 
-        # Show the final balance again for emphasis
-        print(f"\nYour final balance is: ${self.balance:.2f}") 
-class FinancialGame:
-    def __init__(self):
-        self.balance = round(random.uniform(100, 2000), 2)  # Random starting balance between 100 and 2000
-        self.initial_balance = self.balance  # Store initial balance for summary
-        self.scenario_count = 0
-        self.history = []
+        return {
+            'initial_balance': self.initial_balance,
+            'final_balance': self.balance,
+            'total_profit_loss': profit_loss,
+            'scenarios_played': self.scenario_count,
+            'performance_percentage': performance,
+            'coupon': coupon,
+            'history': self.history
+        }
 
-    def play_round(self):
-        scenario = generate_scenario()
-        print("\n" + "="*50)
-        print(scenario['question'])
-        for i, choice in enumerate(scenario['choices']):
-            print(f"{i + 1}. {choice}")
+# Global game instance
+current_game = None
 
-        while True:
-            try:
-                user_choice = int(input("\nEnter your choice (1-3): ")) - 1
-                if 0 <= user_choice <= 2:
-                    break
-                print("Please enter a number between 1 and 3.")
-            except ValueError:
-                print("Please enter a valid number.")
+# Flask Routes
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-        outcome = scenario['outcomes'][user_choice]
-        self.balance += outcome
-        feedback = provide_feedback(outcome)
-        
-        # Store the round's results
-        self.history.append({
-            'scenario': scenario['question'],
-            'choice': scenario['choices'][user_choice],
-            'outcome': outcome
+@app.route('/start_game', methods=['GET'])
+def start_game():
+    global current_game
+    current_game = FinancialGame()
+    return jsonify({
+        'balance': current_game.balance,
+        'initial_balance': current_game.initial_balance
+    })
+
+@app.route('/next_scenario', methods=['GET'])
+def next_scenario():
+    return jsonify(generate_scenario())
+
+@app.route('/make_choice', methods=['POST'])
+def make_choice():
+    global current_game
+    
+    # Get the choice index from the request
+    data = request.json
+    choice_index = data['choice_index']
+    
+    # Play the round
+    round_result = current_game.play_round(choice_index)
+    
+    # Check if game is over
+    game_over = not current_game.check_status()
+    
+    if game_over:
+        # If game is over, get the summary
+        summary = current_game.show_summary()
+        return jsonify({
+            'game_over': True,
+            **summary
         })
-        
-        print(f"\nYou chose: {scenario['choices'][user_choice]}")
-        print(f"Outcome: {'gain' if outcome > 0 else 'loss'} of ${abs(outcome)}")
-        print(feedback)
-        
-        self.scenario_count += 1
-
-    def check_status(self):
-        if self.balance <= 0:
-            print("\n💸 You have gone broke! Game Over.")
-            return False
-        if self.scenario_count >= 5:  # Changed to 15 scenarios
-            print("\n🎉 Congratulations! You've completed all 5 scenarios!")
-            return False
-        return True
-
-    def show_summary(self):
-        print("\n" + "="*50)
-        print("GAME SUMMARY")
-        print("="*50)
-        print(f"Starting balance: ${self.initial_balance:.2f}")
-        print(f"Final balance: ${self.balance:.2f}")
-        
-        profit_loss = self.balance - self.initial_balance
-        print(f"Total {'profit' if profit_loss >= 0 else 'loss'}: ${abs(profit_loss):.2f}")
-        print(f"Scenarios played: {self.scenario_count}")
-        
-        # Calculate performance percentage
-        performance = (self.balance / self.initial_balance) * 100
-        print(f"Performance: {performance:.1f}%")
-        
-        # Check win/lose conditions
-        if performance < 50 or profit_loss < -1000:
-            print("\n💸 You have lost the game! Better luck next time.")
-        else:
-            coupon = 0  # Default coupon value
-            if 50 < performance:
-                coupon = 2.5
-            elif 75 <= performance < 100:
-                coupon = 5
-            elif 100 <= performance < 125:
-                coupon = 7.5
-            elif performance >= 125:
-                coupon = 10
-            
-            if coupon > 0:
-                print(f"\n🎉 Congratulations! You won a {coupon}% off coupon!")
-            else:
-                print("\n🙂 You completed the game but did not earn a coupon.")
-        
-        # Display the journey history
-        if self.history:
-            print("\nYour Journey:")
-            for i, round in enumerate(self.history, 1):
-                print(f"\n{i}. Scenario: {round['scenario']}")
-                print(f"   Choice: {round['choice']}")
-                print(f"   Outcome: ${round['outcome']}")
-
-        # Show the final balance again for emphasis
-        print(f"\nYour final balance is: ${self.balance:.2f}")
-
-def play_game():
-    print("Welcome to the Financial Decision Making Game!")
-    print("You'll start with a random amount between $100 and $2000.")
-    print("Your goal is to make smart financial decisions over a series of scenarios.")
     
-    print("\nInstructions:")
-    print("1. You will be presented with a financial scenario and three choices.")
-    print("2. Each choice will have a different financial outcome (gain or loss).")
-    print("3. Choose wisely! Your balance will change based on your choices.")
-    print("4. You will play a total of 15 scenarios.")
-    print("5. The game ends if you run out of money or complete all scenarios.")
-    
-    print("\nWinning Conditions:")
-    print("1. If your final balance is more than your starting balance, you win!")
-    print("2. If your performance percentage is 75% or higher, you earn a coupon.")
-    print("3. If your balance drops to zero or below, you lose the game.")
-    
-    print("\nLet's get started!\n")
-    
-    game = FinancialGame()
-    print(f"Your starting balance is: ${game.balance:.2f}")
-    
-    while True:
-        game.play_round()
-        
-        # Check if game should end
-        if not game.check_status():
-            game.show_summary()
-            break
-        
-        # Display current balance and remaining scenarios
-        remaining_scenarios = 5 - game.scenario_count
-        print(f"\nYour current balance is: ${game.balance:.2f}")
-        print(f"Remaining scenarios: {remaining_scenarios}")
-        
-        # Ask if player wants to continue
-        if input("\nPress Enter to continue or 'q' to quit: ").lower() == 'q':
-            game.show_summary()
-            break
+    return jsonify({
+        'game_over': False,
+        'balance': round_result['balance'],
+        'scenario_count': round_result['scenario_count'],
+        'feedback': round_result['feedback']
+    })
 
 if __name__ == "__main__":
-    play_game()
-
+    app.run(debug=True)
